@@ -1,0 +1,22 @@
+table {
+  width: 100%;
+  font-size: 1.2em;
+
+  p[cdkDrag] {
+    cursor: pointer;
+    padding: 0.5em;
+    background-color: aliceblue;
+    user-select: none;
+    &:hover {
+      background-color: rgb(165, 208, 246);
+    }
+  }
+}
+
+.table__button--settings {
+  margin: 1em;
+}
+
+.table--dialog {
+   padding: 2em;
+}

@@ -1,15 +1,16 @@
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { Component, QueryList, ViewChild, ViewChildren, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatInput } from '@angular/material/input';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Observable, interval, of, tap } from 'rxjs';
 import { TableSettingsComponent } from '../../common/table-settings/table-settings.component';
 import { User } from '../../model/user';
 import { UserService } from '../../service/user.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,101 +20,105 @@ import { UserService } from '../../service/user.service';
   imports: [
     CommonModule,
     TableSettingsComponent,
+    ReactiveFormsModule,
+    MatIconModule,
+    MatTableModule,
+    MatPaginatorModule,
+    CdkDropList,
   ],
   providers: [
     UserService,
+    MatDialog,
   ]
 })
 export class DashboardComponent {
 
-  users$: Observable<User[]> = of([]);
-
   userService = inject(UserService);
+  dialog: MatDialog = inject(MatDialog);
 
-  // dialog: MatDialog = inject(MatDialog);
 
-  // pageSizeOptions: number[] = [5, 10, 25, 50, 100];
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChildren(MatInput) filterInputs!: QueryList<MatInput>;
 
-  // limit = {page: 1, limit: this.pageSizeOptions[0]};
 
-  // users$ = this.userService.list$.pipe(
-  //   tap( users => this.dataSource.data = users ),
-  //   tap( users => {
-  //     if (this.paginator) {
-  //       const to = setTimeout( () => {
-  //         clearTimeout(to);
-  //         this.paginator.length = this.totalCount;
-  //         this.paginator.pageIndex = this.limit.page - 1;
-  //         this.paginator.pageSize = this.limit.limit;
-  //       });
-  //     }
-  //   })
-  // );
+  pageSizeOptions: number[] = [5, 10, 25, 50, 100];
 
-  // count$ = this.userService.count$;
+  limit = {page: 1, limit: this.pageSizeOptions[0]};
 
-  // totalCount: number = 0;
+  dataSource = new MatTableDataSource<User>([]);
 
-  // readonly initialColumns: string[] = ['id', 'firstName', 'lastName', 'email', 'address'];
+  totalCount: number = 0;
 
-  // displayedColumns: string[] = [...this.initialColumns];
+  users$ = this.userService.list$.pipe(
+    tap( users => this.dataSource.data = users ),
+    tap( users => {
+      if (this.paginator) {
+        const to = setTimeout( () => {
+          clearTimeout(to);
+          this.paginator.length = this.totalCount;
+          this.paginator.pageIndex = this.limit.page - 1;
+          this.paginator.pageSize = this.limit.limit;
+        });
+      }
+    })
+  );
 
-  // dataSource = new MatTableDataSource<User>([]);
+  count$ = this.userService.count$;
 
-  // filterGroup: FormGroup = new FormGroup({});
+  readonly initialColumns: string[] = ['id', 'firstName', 'lastName', 'email', 'address'];
 
-  // filterInited: boolean = false;
+  displayedColumns: string[] = [...this.initialColumns];
 
-  // @ViewChild(MatPaginator) paginator!: MatPaginator;
+  filterGroup: FormGroup = new FormGroup({});
 
-  // @ViewChildren(MatInput) filterInputs!: QueryList<MatInput>;
+  filterInited: boolean = false;
 
-  // ngAfterViewInit() {
-  //   this.userService.getAll(this.limit);
-  //   this.dataSource.paginator = this.paginator;
-  //   this.count$.subscribe( count => this.totalCount = count );
+  ngAfterViewInit() {
+    this.userService.getAll(this.limit);
+    this.dataSource.paginator = this.paginator;
+    this.count$.subscribe( count => this.totalCount = count );
 
-  //   this.displayedColumns.forEach( c => this.filterGroup.addControl(
-  //     c, new FormControl(''))
-  //   );
+    this.displayedColumns.forEach( c => this.filterGroup.addControl(
+      c, new FormControl(''))
+    );
 
-  //   setTimeout( () => this.filterInited = true );
+    setTimeout( () => this.filterInited = true );
 
-  //   setTimeout( () => {
-  //     this.displayedColumns[0] = 'firstName';
-  //     this.displayedColumns[1] = 'id';
-  //   });
-  // }
+    setTimeout( () => {
+      this.displayedColumns[0] = 'firstName';
+      this.displayedColumns[1] = 'id';
+    });
+  }
 
-  // onFilterStart(): void {
-  //   const values = this.filterGroup.value;
-  //   this.userService.filter(values, this.limit);
-  // }
+  onFilterStart(): void {
+    const values = this.filterGroup.value;
+    this.userService.filter(values, this.limit);
+  }
 
-  // onPaginatorChange(ev: PageEvent): void {
-  //   this.limit = {page: ev.pageIndex + 1, limit: ev.pageSize};
-  //   this.userService.getAll(this.limit);
-  // }
+  onPaginatorChange(ev: PageEvent): void {
+    this.limit = {page: ev.pageIndex + 1, limit: ev.pageSize};
+    this.userService.getAll(this.limit);
+  }
 
-  // drop(ev: CdkDragDrop<string>): void {
-  //   const target = ev.container.data;
-  //   const elem = ev.previousContainer.data;
-  //   const elemIndex = this.displayedColumns.findIndex( e => e === elem );
-  //   const targetIndex = this.displayedColumns.findIndex( e => e === target );
-  //   [this.displayedColumns[elemIndex], this.displayedColumns[targetIndex]]
-  //     = [this.displayedColumns[targetIndex], this.displayedColumns[elemIndex]];
-  // }
+  drop(ev: CdkDragDrop<string>): void {
+    const target = ev.container.data;
+    const elem = ev.previousContainer.data;
+    const elemIndex = this.displayedColumns.findIndex( e => e === elem );
+    const targetIndex = this.displayedColumns.findIndex( e => e === target );
+    [this.displayedColumns[elemIndex], this.displayedColumns[targetIndex]]
+      = [this.displayedColumns[targetIndex], this.displayedColumns[elemIndex]];
+  }
 
-  // openDialog(): void {
-  //   const dialogRef = this.dialog.open(TableSettingsComponent, {
-  //     data: { cols: this.initialColumns },
-  //     panelClass: 'table--dialog'
-  //   });
+  openDialog(): void {
+    const dialogRef = this.dialog.open(TableSettingsComponent, {
+      data: { cols: this.initialColumns },
+      panelClass: 'table--dialog'
+    });
 
-  //   dialogRef.afterClosed().subscribe(result => {
-  //     console.log('The dialog was closed');
-  //     this.displayedColumns = result;
-  //   });
-  // }
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.displayedColumns = result;
+    });
+  }
 
 }

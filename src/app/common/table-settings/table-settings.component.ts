@@ -1,6 +1,7 @@
+import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 
 export interface DialogData {
   cols: string[];
@@ -12,7 +13,9 @@ export interface DialogData {
   styleUrls: ['./table-settings.component.scss'],
   standalone: true,
   imports: [
+    CommonModule,
     MatCheckboxModule,
+    MatDialogModule,
   ],
 })
 export class TableSettingsComponent {

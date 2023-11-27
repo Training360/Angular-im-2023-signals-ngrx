@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '../model/user';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class UserService {
 
   http = inject(HttpClient);
 
-  apiUrl: string = 'http://localhost:3000/users/';
+  apiUrl: string = environment.apiUrl + 'users/';
 
   list$: BehaviorSubject<User[]> = new BehaviorSubject<User[]>([]);
 
@@ -29,6 +30,10 @@ export class UserService {
         this.list$.next(resp.body || []);
       }
     );
+  }
+
+  remove(user: User): void {
+    this.http.delete(`${this.apiUrl}${user.id}`).subscribe();
   }
 
   filter(props: {[k: string]: string}, limit?: {page: number, limit: number} ): void {

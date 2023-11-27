@@ -12,6 +12,7 @@ import { User } from '../../model/user';
 import { UserService } from '../../service/user.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @Component({
   selector: 'app-dashboard',
@@ -27,6 +28,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatPaginatorModule,
     MatButtonModule,
     MatInputModule,
+    MatButtonToggleModule,
     CdkDropList,
   ],
   providers: [
@@ -68,7 +70,7 @@ export class DashboardComponent {
 
   count$ = this.userService.count$;
 
-  readonly initialColumns: string[] = ['id', 'firstName', 'lastName', 'email', 'address'];
+  readonly initialColumns: string[] = ['id', 'firstName', 'lastName', 'email', 'address', 'manage'];
 
   displayedColumns: string[] = [...this.initialColumns];
 
@@ -122,6 +124,10 @@ export class DashboardComponent {
       console.log('The dialog was closed');
       this.displayedColumns = result;
     });
+  }
+
+  onRemove(user: User): void {
+    this.userService.remove(user);
   }
 
 }

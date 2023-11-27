@@ -3,7 +3,7 @@ import { Component, QueryList, ViewChild, ViewChildren, inject } from '@angular/
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatInput } from '@angular/material/input';
+import { MatInput, MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Observable, interval, of, tap } from 'rxjs';
@@ -11,6 +11,7 @@ import { TableSettingsComponent } from '../../common/table-settings/table-settin
 import { User } from '../../model/user';
 import { UserService } from '../../service/user.service';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,6 +25,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatIconModule,
     MatTableModule,
     MatPaginatorModule,
+    MatButtonModule,
+    MatInputModule,
     CdkDropList,
   ],
   providers: [

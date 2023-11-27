@@ -7,6 +7,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatMenuModule } from '@angular/material/menu';
 import { Subscription } from 'rxjs';
 import { RouterModule } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-layout',
@@ -20,6 +21,7 @@ import { RouterModule } from '@angular/router';
     MatListModule,
     MatSidenavModule,
     MatMenuModule,
+    MatButtonModule,
   ],
 })
 export class LayoutComponent {

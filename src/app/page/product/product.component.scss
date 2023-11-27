@@ -1,0 +1,17 @@
+table {
+
+  .mat-button-toggle.info {
+    background-color: #306cee;
+    color: #ffffff;
+  }
+
+  .mat-button-toggle.danger {
+    background-color: #dc3545;
+    color: #ffffff;
+  }
+
+  td[mat-cell] {
+    padding-top: .3em;
+    padding-bottom: .3em;
+  }
+}

@@ -37,6 +37,10 @@ export class ProductComponent {
 
   productService = inject(ProductService);
 
+  list$ = this.productService.getAll();
+
+  displayedColumns: string[] = ['id', 'name', 'price', 'description', 'manage'];
+
   onRemove(product: Product): void {
     this.productService.remove(product);
   }

@@ -11,6 +11,7 @@ import { MatTableModule } from '@angular/material/table';
 import { TableSettingsComponent } from '../../common/table-settings/table-settings.component';
 import { ProductService } from '../../service/product.service';
 import { Product } from '../../model/product';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-product',
@@ -28,9 +29,10 @@ import { Product } from '../../model/product';
     MatInputModule,
     MatButtonToggleModule,
     CdkDropList,
+    RouterModule,
   ],
   providers: [
-    ProductService
+    ProductService,
   ],
 })
 export class ProductComponent {

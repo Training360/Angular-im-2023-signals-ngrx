@@ -18,6 +18,12 @@ export const routes: Routes = [
     ),
   },
   {
+    path: 'product/edit/:id',
+    loadComponent: () => import('./page/product-editor/product-editor.component').then(
+      m => m.ProductEditorComponent
+    ),
+  },
+  {
     path: '**',
     redirectTo: '',
   },

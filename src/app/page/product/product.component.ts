@@ -1,5 +1,4 @@
 import { Component, OnInit, computed, effect, inject, signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -11,7 +10,6 @@ import { ProductService } from '../../service/product.service';
 import { Product } from '../../model/product';
 import { RouterModule } from '@angular/router';
 import { FilterPipe } from '../../pipe/filter.pipe';
-import { tap } from 'rxjs';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 @Component({

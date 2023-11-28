@@ -24,6 +24,12 @@ export const routes: Routes = [
     ),
   },
   {
+    path: 'customers',
+    loadComponent: () => import('./page/customer/customer.component').then(
+      m => m.CustomerComponent
+    ),
+  },
+  {
     path: '**',
     redirectTo: '',
   },

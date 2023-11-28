@@ -1,17 +1,18 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, computed, effect, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
-import { CdkDropList } from '@angular/cdk/drag-drop';
-import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
-import { TableSettingsComponent } from '../../common/table-settings/table-settings.component';
+import { MatCardModule } from '@angular/material/card'
 import { ProductService } from '../../service/product.service';
 import { Product } from '../../model/product';
 import { RouterModule } from '@angular/router';
+import { FilterPipe } from '../../pipe/filter.pipe';
+import { tap } from 'rxjs';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @Component({
   selector: 'app-product',
@@ -20,31 +21,59 @@ import { RouterModule } from '@angular/router';
   styleUrl: './product.component.scss',
   imports: [
     CommonModule,
-    TableSettingsComponent,
-    ReactiveFormsModule,
+    FlexLayoutModule,
     MatIconModule,
     MatTableModule,
-    MatPaginatorModule,
     MatButtonModule,
     MatInputModule,
     MatButtonToggleModule,
-    CdkDropList,
+    MatCardModule,
     RouterModule,
+    FilterPipe,
   ],
   providers: [
     ProductService,
   ],
 })
-export class ProductComponent {
+export class ProductComponent implements OnInit {
 
   productService = inject(ProductService);
 
-  list$ = this.productService.getAll();
+  list = signal<Product[]>([]);
 
   displayedColumns: string[] = ['id', 'name', 'price', 'description', 'manage'];
 
+  // Signals
+  filterText = signal<string>('');
+
+  listQty = 0;
+
+  sumPrice = computed(() => {
+    return this.list().reduce(( sum, item ) => sum + item.price, 0 );
+  });
+
+  activeQty = computed(() => {
+    return this.list().filter(item => item.active).length;
+  });
+
+  constructor() {
+    effect(() => {
+      this.listQty = this.list()?.length || 0;
+    });
+  }
+
+  ngOnInit(): void {
+    this.productService.getAll().subscribe(
+      list => this.list.set(list)
+    );
+  }
+
   onRemove(product: Product): void {
-    this.productService.remove(product);
+    this.productService.remove(product).subscribe(
+      () => {
+        this.list.update(list => list.filter(item => item.id !== product.id));
+      }
+    )
   }
 
 }

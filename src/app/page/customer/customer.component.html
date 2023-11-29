@@ -1,3 +1,69 @@
-<pre>
-  {{ list() | json }}
-</pre>
+<div fxLayout="column" fxLayoutGap="20px">
+
+    <table mat-table [dataSource]="list()" class="mat-elevation-z8">
+
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> No. </th>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <!-- Email Column -->
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef> Email </th>
+        <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+      </ng-container>
+
+      <!-- Address Column -->
+      <ng-container matColumnDef="address">
+        <th mat-header-cell *matHeaderCellDef> Address </th>
+        <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+      </ng-container>
+
+      <!-- Ip address Column -->
+      <ng-container matColumnDef="ip_address">
+        <th mat-header-cell *matHeaderCellDef> IP. </th>
+        <td mat-cell *matCellDef="let element"> {{element.ip_address}} </td>
+      </ng-container>
+
+      <!-- Ip address Column -->
+      <ng-container matColumnDef="active">
+        <th mat-header-cell *matHeaderCellDef> A. </th>
+        <td mat-cell *matCellDef="let element">
+          @if (element.active) {
+            <mat-chip [style.background-color]="'aquamarine'">
+              <mat-icon>check</mat-icon>
+            </mat-chip>
+          } @else {
+            <mat-chip [style.background-color]="'lightcoral'">
+              <mat-icon>close</mat-icon>
+            </mat-chip>
+          }
+        </td>
+      </ng-container>
+
+      <!-- Buttons Column -->
+      <ng-container matColumnDef="manage">
+        <th mat-header-cell *matHeaderCellDef> manage </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-button-toggle-group>
+            <mat-button-toggle [routerLink]="['/customer', 'edit', element.id]" class="info">
+              <mat-icon>edit</mat-icon>
+            </mat-button-toggle>
+            <mat-button-toggle (click)="onRemove(element)" class="danger">
+              <mat-icon>delete</mat-icon>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>

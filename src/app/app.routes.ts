@@ -30,6 +30,12 @@ export const routes: Routes = [
     ),
   },
   {
+    path: 'customer/edit/:id',
+    loadComponent: () => import('./page/customer-editor/customer-editor.component').then(
+      m => m.CustomerEditorComponent
+    ),
+  },
+  {
     path: '**',
     redirectTo: '',
   },

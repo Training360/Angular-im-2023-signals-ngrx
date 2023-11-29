@@ -1,5 +1,5 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
@@ -10,7 +10,7 @@ import { provideEffects } from '@ngrx/effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes),
+    provideRouter(routes, withComponentInputBinding()),
     provideAnimations(),
     provideHttpClient(),
     importProvidersFrom([

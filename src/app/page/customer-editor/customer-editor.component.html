@@ -1,0 +1,48 @@
+<div fxLayout="row">
+  <div fxFlex="20" fxFlex.lt-md="1"></div>
+  <div fxFlex="60" fxFlex.lt-md="98">
+    <h3>Product Editor</h3>
+    <form fxLayout="column" fxLayoutGap="1.5em" [formGroup]="form" (ngSubmit)="onUpdate(form)">
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input formControlName="name" matInput placeholder="Name">
+        <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+        @if (form.controls['name'].invalid) {
+          <mat-hint>Minimum 3 characters</mat-hint>
+        }
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input type="email" formControlName="email" matInput>
+        <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+        @if (form.controls['email'].invalid) {
+          <mat-hint>Please type a valid email</mat-hint>
+        }
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Address</mat-label>
+        <input formControlName="address" matInput>
+        <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+        @if (form.controls['address'].invalid) {
+          <mat-hint>It is required</mat-hint>
+        }
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>IP address</mat-label>
+        <input formControlName="ip_address" matInput>
+        <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+        @if (form.controls['ip_address'].invalid) {
+          <mat-hint>The format is: xxx.xxx.xxx.xxx</mat-hint>
+        }
+      </mat-form-field>
+      <mat-checkbox class="example-margin"
+                  [color]="'primary'"
+                  formControlName="active">
+      active
+    </mat-checkbox>
+
+    <button [disabled]="!form.valid" type="submit" mat-raised-button color="primary">Update</button>
+    </form>
+  </div>
+  <div fxFlex="20" fxFlex.lt-md="1"></div>
+</div>
